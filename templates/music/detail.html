@@ -1,0 +1,30 @@
+{% extends 'music/Base.html' %}
+{% block title %}Viberr/{{album.album_title}}{% endblock %}
+{% block body %}
+<img src="{{album.album_logo}}" height="300" width ="236">
+<h1>{{album.album_title}}</h1>
+<h3>{{album.artist}}</h3>
+{% if error_message %}
+<p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+<!--action determines what action it has to perform after hitting the submit button-->
+<!--the url pattern is as follows  url 'your view name(by using app_name)' DATA_you_need_to_pass_to_that_view -->
+<form action="{% url 'music:favorite' album.id %}" method="post">
+    {% csrf_token %}
+    {% for song in album.song_set.all %}
+        <input type="radio" id="song{{ forloop.counter }}" name="song" value="{{ song.id }}">
+        <label for="song{{ forloop.counter }}">
+            {{ song.song_title }}
+            {% if song.is_favorite %}
+            ★
+            {% endif %}
+
+        </label><br>
+    {%endfor%}
+
+    <input type="submit" value="Favourite">
+
+    <input type="submit" value="Not Favourite">
+</form>
+{% endblock %}
