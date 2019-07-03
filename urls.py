@@ -13,5 +13,6 @@ urlpatterns = (
     # /music/<album_id>/favorite
     #instead of typing this r'^(?P<album_id>[0-9]+)/favorite/ b $' we can use the name,i.e 'favorite' to access this page
     url(r'^(?P<album_id>[0-9]+)/favorite/ b $', views.favorite, name='favorite'),
-
+    
+   
 )
