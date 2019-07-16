@@ -2,7 +2,8 @@ from django.db import models
 from django.urls import reverse
 
 
-
+# whenever u create or alter a model then go to terminal and write 'python manage.py makemigrations' and
+# 'python manage.py migrate'-this creates the table for ur current structure
 class Album(models.Model):
     artist = models.CharField(max_length=200)
     album_title = models.CharField(max_length=400)

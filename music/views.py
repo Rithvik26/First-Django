@@ -51,7 +51,7 @@ class UserFormView(View):
         form = self.form_class(None)
         return render(request, self.template_name, {'form': form})
 
-    #process form data after clicking on submit
+    # process form data after clicking on submit
     def post(self,request):
         form = self.form_class(request.POST)
 
@@ -59,11 +59,11 @@ class UserFormView(View):
 
             user = form.save(commit=False)
 
-            #clean (normalized) data
+            # clean (normalized) data
             username = form.cleaned_data['username']
 
             password = form.cleaned_data['password']
-            #set the user password beçause password should be in the form of hash
+            # set the user password beçause password should be in the form of hash
             user.set_password(password)
             user.save()
 
