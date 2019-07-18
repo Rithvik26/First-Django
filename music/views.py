@@ -4,8 +4,10 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login
 from django.views import generic
 from django.views.generic import View
-from .models import Album,Song
+from .models import Hero,Album,Song
 from .forms import Userform
+from rest_framework.views import APIView
+
 
 class IndexView(generic.ListView):
     template_name = 'music/index.html'
@@ -18,6 +20,14 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Album
     template_name = 'music/detail.html'
+
+
+class HeroesView(generic.ListView):
+    template_name = 'music/heroes_index.html'
+    context_object_name = 'all_heroes'
+
+    def get_queryset(self):
+        return Hero.objects.all()
 
 
 class AlbumCreate(CreateView):

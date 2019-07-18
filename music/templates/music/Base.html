@@ -38,6 +38,11 @@
                 <button type="submit" class="btn btn-default">Search</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                 <li>
+                    <a href="{% 'music:hero-index' %}">
+                        <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp; Heroes
+                    </a>
+                </li>
                 <li>
                     <a href="{% url 'music:album-add' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Album
