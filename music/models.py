@@ -8,17 +8,19 @@ class Hero(models.Model):
     hero_name = models.CharField(max_length=15)
     movie = models.CharField(max_length=15)
     song_name = models.CharField(max_length=10)
+    age = models.IntegerField()
 
     def __str__(self):
         return self.hero_name
 
+
 class Album(models.Model):
     artist = models.CharField(max_length=200)
     album_title = models.CharField(max_length=400)
-    hero = models.ForeignKey(Hero, on_delete=models.CASCADE)
-    genre = models.CharField(max_length=100)
+    genre = models.CharField(max_length=10)
     release = models.IntegerField()
     album_logo = models.FileField()
+
 
     def get_absolute_url(self):
         return reverse('music:detail', kwargs={'pk': self.pk})

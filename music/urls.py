@@ -9,7 +9,8 @@ urlpatterns = [
 
     url(r'^register/$', views.UserFormView.as_view(), name='register'),
 
-    url(r'^hero/$', views.HeroesView.as_view(), name='hero-index'),
+
+    url(r'^hero/$', views.HeroesView.as_view(), name='hero-name'),
 
     # /music/712/
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
