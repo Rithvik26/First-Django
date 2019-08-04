@@ -4,27 +4,33 @@ from django.urls import reverse
 
 # whenever u create or alter a model then go to terminal and write 'python manage.py makemigrations' and
 # 'python manage.py migrate'-this creates the table for ur current structure
+
 class Hero(models.Model):
+
     hero_name = models.CharField(max_length=15)
-    movie = models.CharField(max_length=15)
-    song_name = models.CharField(max_length=10)
+
     age = models.IntegerField()
+
+    # Meta replaces name on admin page
+    class Meta:
+        verbose_name_plural = "Hero"
 
     def __str__(self):
         return self.hero_name
 
 
+
 class Album(models.Model):
+
+    hero = models.ForeignKey(Hero, default=1, verbose_name="Hero",on_delete=models.CASCADE)
     artist = models.CharField(max_length=200)
     album_title = models.CharField(max_length=400)
     genre = models.CharField(max_length=10)
     release = models.IntegerField()
     album_logo = models.FileField()
 
-
     def get_absolute_url(self):
         return reverse('music:detail', kwargs={'pk': self.pk})
-
 
     def __str__(self):
         return self.album_title + ' - '+self.artist
@@ -36,9 +42,10 @@ class Song(models.Model):
     song_title = models.CharField(max_length=200)
     is_favorite = models.BooleanField(default=False)
 
-
     def __str__(self):
         return self.song_title
+
+
 
 
 

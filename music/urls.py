@@ -9,11 +9,15 @@ urlpatterns = [
 
     url(r'^register/$', views.UserFormView.as_view(), name='register'),
 
+    url(r'^hero/(?P<pk>[0-9]+)/$', views.HeroIndexView.as_view(), name='index-h'),
 
-    url(r'^hero/$', views.HeroesView.as_view(), name='hero-name'),
 
     # /music/712/
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+
+    url(r'hero/$', views.HeroesView.as_view(), name='hero-in'),
+
+
 
     #/music/album/add
     url(r'album/add/$',views.AlbumCreate.as_view(),name='album-add'),
@@ -24,7 +28,8 @@ urlpatterns = [
     # /music/album/2/delete/
     url(r'album/(?P<pk>[0-9]+)/delete$', views.AlbumDelete.as_view(), name='album-delete'),
 
-    url(r'^(?P<album_id>[0-9]+)/song/add/$',views.SongCreate.as_view(),name='song-add')
+    url(r'^(?P<album_id>[0-9]+)/song/add/$',views.SongCreate.as_view(),name='song-add'),
 
+    url(r'^hero/add/$', views.HeroCreate.as_view(), name='hero-add'),
 
 ]

@@ -23,22 +23,29 @@ class DetailView(generic.DetailView):
 
 
 class HeroesView(generic.ListView):
-    template_name = 'music/heroes_index.html'
+
     context_object_name = 'all_heroes'
+    template_name = 'music/heroes_index.html'
 
     def get_queryset(self):
         return Hero.objects.all()
 
 
+class HeroIndexView(generic.DetailView):
+    model = Hero
+    template_name = 'music/hero_detail_albums.html'
+
+
+
 class AlbumCreate(CreateView):
     model = Album
-    fields = ['artist','album_title','genre','release','album_logo']
+    fields = ['hero','artist', 'album_title', 'genre', 'release', 'album_logo']
     success_url = "/music/"
 
 
 class AlbumUpdate(UpdateView):
     model = Album
-    fields = ['artist','album_title','genre','release','album_logo']
+    fields = ['hero','artist', 'album_title', 'genre', 'release', 'album_logo']
 
 
 class AlbumDelete(DeleteView):
@@ -48,8 +55,14 @@ class AlbumDelete(DeleteView):
 
 class SongCreate(CreateView):
     model = Song
-    fields = ['album','file_type','song_title','is_favorite']
+    fields = ['album', 'file_type', 'song_title', 'is_favorite']
     success_url = "/music/{album_id}"
+
+
+class HeroCreate(CreateView):
+    model = Hero
+    fields = ['hero_name', 'age']
+    success_url = "/music/hero"
 
 
 class UserFormView(View):
