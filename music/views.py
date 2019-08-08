@@ -1,12 +1,13 @@
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.urls import reverse_lazy
 from django.shortcuts import render,redirect
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.views import generic
 from django.views.generic import View
 from .models import Hero,Album,Song
 from .forms import Userform
 from rest_framework.views import APIView
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 
 
 class IndexView(generic.ListView):
@@ -59,6 +60,13 @@ class SongCreate(CreateView):
     success_url = "/music/{album_id}"
 
 
+class SongDelete(DeleteView):
+    model = Song
+    success_url = "/music/{album_id}"
+
+
+
+
 class HeroCreate(CreateView):
     model = Hero
     fields = ['hero_name', 'age']
@@ -66,17 +74,17 @@ class HeroCreate(CreateView):
 
 
 class UserFormView(View):
-    form_class = Userform
+    form_class = UserCreationForm
     template_name = 'music/registration_form.html'
 
     #get means a blank form which requires to be filled if it is a new user i.e,Register
     def get(self,request):
-        form = self.form_class(None)
+        form = self.form_class
         return render(request, self.template_name, {'form': form})
 
     # process form data after clicking on submit
     def post(self,request):
-        form = self.form_class(request.POST)
+        form = self.form_class(data=request.POST)
 
         if form.is_valid():
 
@@ -100,3 +108,35 @@ class UserFormView(View):
                     return redirect('music:index')
 
         return render(request, self.template_name, {'form': form})
+
+
+class LoginViews(View):
+    form_class = Userform
+    template_name = 'music/login_form.html'
+    def get(self,request):
+        form = self.form_class(None)
+        return render(request , 'music/login_form.html', {'form':form})
+
+    def post(self, request):
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+
+                return redirect('music:hero-in')
+            else:
+                return render(request, 'music/login_form.html', {'error_message': 'Your account has been disabled'})
+        else:
+            return render(request, 'music/login_form.html', {'error_message': 'Invalid login'})
+
+        return render(request, self.template_name, {'form': form})
+
+
+def logout_user(request):
+    logout(request)
+    form = Userform(request.POST)
+    context = {'form':form}
+    return render(request, 'music/visitor_base.html',context)

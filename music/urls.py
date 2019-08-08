@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from . import views
+from django.contrib.auth import views as auth_views
 #the app_name is given so that the below html pages can be referred as the pages of this music app
 app_name = 'music'
 
@@ -17,8 +18,6 @@ urlpatterns = [
 
     url(r'hero/$', views.HeroesView.as_view(), name='hero-in'),
 
-
-
     #/music/album/add
     url(r'album/add/$',views.AlbumCreate.as_view(),name='album-add'),
 
@@ -26,10 +25,17 @@ urlpatterns = [
     url(r'album/(?P<pk>[0-9]+)/$', views.AlbumUpdate.as_view(), name='album-update'),
 
     # /music/album/2/delete/
-    url(r'album/(?P<pk>[0-9]+)/delete$', views.AlbumDelete.as_view(), name='album-delete'),
+    url(r'album/(?P<pk>[0-9]+)/delete/$', views.AlbumDelete.as_view(), name='album-delete'),
 
-    url(r'^(?P<album_id>[0-9]+)/song/add/$',views.SongCreate.as_view(),name='song-add'),
+
+    url(r'^(?P<album_id>[0-9]+)/song/add/$',views.SongCreate.as_view(), name='song-add'),
+
+    url(r'song/(?P<pk>[0-9]+)/delete/$', views.SongDelete.as_view(), name='song-delete'),
 
     url(r'^hero/add/$', views.HeroCreate.as_view(), name='hero-add'),
+
+    url(r'login/$',views.LoginViews.as_view(),name='login'),
+
+    url(r'logout_user/$', views.logout_user, name='logout'),
 
 ]

@@ -3,6 +3,16 @@
 
 {% block title %}{{ album }}{% endblock %}
 {% block albums_active %}active{% endblock %}
+{% block auth %}
+{% if user.is_active %}
+    {{user.username}}
+{% else %}
+    Register
+{% endif %}
+{% endblock %}
+
+
+
 
 {% block body %}
 <div class="albums-container container-fluid">

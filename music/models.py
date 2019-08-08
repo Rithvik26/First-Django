@@ -1,12 +1,13 @@
 from django.db import models
 from django.urls import reverse
 
+from django.contrib.auth.models import Permission, User
 
 # whenever u create or alter a model then go to terminal and write 'python manage.py makemigrations' and
 # 'python manage.py migrate'-this creates the table for ur current structure
 
 class Hero(models.Model):
-
+    user = models.ForeignKey(User, default=1,on_delete=models.CASCADE)
     hero_name = models.CharField(max_length=15)
 
     age = models.IntegerField()
