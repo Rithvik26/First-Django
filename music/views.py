@@ -6,6 +6,7 @@ from django.views import generic
 from django.views.generic import View
 from .models import Hero,Album,Song
 from .forms import Userform
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 
@@ -14,8 +15,11 @@ class IndexView(generic.ListView):
     template_name = 'music/index.html'
     context_object_name = 'all_albums'
 
+    model = User
     def get_queryset(self):
-        return Album.objects.all()
+        return Album.objects.filter(user=self.request.user)
+
+
 
 
 class DetailView(generic.DetailView):
@@ -29,7 +33,7 @@ class HeroesView(generic.ListView):
     template_name = 'music/heroes_index.html'
 
     def get_queryset(self):
-        return Hero.objects.all()
+        return Hero.objects.filter(user=self.request.user)
 
 
 class HeroIndexView(generic.DetailView):
@@ -65,49 +69,48 @@ class SongDelete(DeleteView):
     success_url = "/music/{album_id}"
 
 
-
-
 class HeroCreate(CreateView):
     model = Hero
-    fields = ['hero_name', 'age']
+    fields = ['hero_name','hero_img', 'age']
     success_url = "/music/hero"
 
 
+class HeroDelete(DeleteView):
+    model = Hero
+    success_url = reverse_lazy('music:hero-in')
+
+
+
 class UserFormView(View):
-    form_class = UserCreationForm
+
+    form_class = Userform
     template_name = 'music/registration_form.html'
 
-    #get means a blank form which requires to be filled if it is a new user i.e,Register
-    def get(self,request):
-        form = self.form_class
+    # get means a blank form which requires to be filled if it is a new user i.e,Register
+    def get(self, request):
+        form = self.form_class(None)
         return render(request, self.template_name, {'form': form})
 
     # process form data after clicking on submit
-    def post(self,request):
-        form = self.form_class(data=request.POST)
-
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
-
             user = form.save(commit=False)
-
             # clean (normalized) data
             username = form.cleaned_data['username']
-
             password = form.cleaned_data['password']
             # set the user password beçause password should be in the form of hash
             user.set_password(password)
             user.save()
-
             # returns User objects if credentials are correct
-            user = authenticate(username=username,password=password)
-
+            user = authenticate(username=username, password=password)
             if user:
-
                 if user.is_active:
-                    login(request,user)
+                    login(request, user)
                     return redirect('music:index')
-
         return render(request, self.template_name, {'form': form})
+
+
 
 
 class LoginViews(View):
@@ -118,7 +121,6 @@ class LoginViews(View):
         return render(request , 'music/login_form.html', {'form':form})
 
     def post(self, request):
-
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
@@ -132,11 +134,12 @@ class LoginViews(View):
         else:
             return render(request, 'music/login_form.html', {'error_message': 'Invalid login'})
 
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name)
 
 
 def logout_user(request):
     logout(request)
     form = Userform(request.POST)
-    context = {'form':form}
+    context = {'form':form
+               }
     return render(request, 'music/visitor_base.html',context)

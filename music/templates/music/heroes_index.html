@@ -18,11 +18,31 @@
         </div>
         {% if all_heroes %}
             {% for hero in all_heroes %}
-                <div class="container-fluid">
-                    <a href="{% url 'music:index-h' hero.id %}">
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+                <div class="col-sm-4 col-lg-2">
+                    <div class="thumbnail">
+                        <!--Album logo-->
+                        <a href="{% url 'music:index-h' hero.id %}">
+                            <img src="{{ hero.hero_img.url }}" class="img-responsive">
+                        </a>
+                        <div class="caption">
+                            <h2>{{ hero.hero_name }}</h2>
+                            <h4>{{ hero.age }}</h4>
 
-                    <h2>{{ hero.hero_name }}</h2>
-                    </a>
+                            <!-- View Details -->
+                            <a href="{% url 'music:index-h' hero.id %}" class="btn btn-primary btn-sm" role="button">View Albums</a>
+                             <!-- Delete Album -->
+                            <form action="{% url 'music:hero-delete' hero.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="hero_id" value="{{ hero.id }}" />
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </form>
+
+
+                        </div>
+                    </div>
                 </div>
                 {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
             {% endfor %}

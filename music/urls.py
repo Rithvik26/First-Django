@@ -34,6 +34,8 @@ urlpatterns = [
 
     url(r'^hero/add/$', views.HeroCreate.as_view(), name='hero-add'),
 
+    url(r'hero/(?P<pk>[0-9]+)/delete/$', views.HeroDelete.as_view(), name='hero-delete'),
+
     url(r'login/$',views.LoginViews.as_view(),name='login'),
 
     url(r'logout_user/$', views.logout_user, name='logout'),
