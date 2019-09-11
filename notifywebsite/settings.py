@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'rest_framework'
 
 ]
 
@@ -127,3 +127,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT=os.path.join(BASE_DIR ,'media')
 #for users on browsers for accessing the files over http
 MEDIA_URL = '/media/'
+
+
+LOGIN_URL = "/music/login"

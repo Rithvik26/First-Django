@@ -1,10 +1,15 @@
-from django.conf.urls import url
+from django.conf.urls import url,include,re_path
+from rest_framework.routers import DefaultRouter
 from . import views
 from django.contrib.auth import views as auth_views
 #the app_name is given so that the below html pages can be referred as the pages of this music app
 app_name = 'music'
 
+
 urlpatterns = [
+
+    url(r'location/$', views.geo_loc, name='geo-in'),
+
     # /music/
     url(r'^$', views.IndexView.as_view(), name='index'),
 
@@ -38,6 +43,6 @@ urlpatterns = [
 
     url(r'login/$',views.LoginViews.as_view(),name='login'),
 
-    url(r'logout_user/$', views.logout_user, name='logout'),
+    url(r'logout_user/$', views.logout_user.as_view(), name='logout'),
 
 ]
