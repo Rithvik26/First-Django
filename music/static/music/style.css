@@ -2,34 +2,29 @@ body{
     background: red url("images/background.jpg");
     
 }
-   #ww{
 
-background-color: lavenderblush;
-margin-top :2%;
-width:20%;
-
-}
-#ww:hover{
-    background-color: blue;
-}
-#heads{
-    background-color: orangered;
-    margin-left: 1px;
-    
-    text-emphasis: none;
-
-}
-#heads:hover{
-    background-color:yellow;
-}
-#ab{
-    text-decoration: none;
-    text-decoration-style: initial;
+ul.errorlist {
+    padding-left: 0;
 }
 
-.navbar{
+ul.errorlist > li {
+    list-style: none;
+}
+
+.navbar {
     border-radius: 0;
 }
-.navbar-brand{
-    font-family: 'Satisfy',cursive;
+
+.navbar-brand {
+    font-family: 'Satisfy', cursive;
 }
+
+.glyphicon-star {
+    color: #CCCCCC;
+    font-size: 16px;
+}
+
+.glyphicon-star.active {
+    color: #FDB230;
+}
+© 2019 GitHub, Inc.

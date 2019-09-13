@@ -1,11 +1,11 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect ,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views import generic
-from django.views.generic import View
+from django.http import JsonResponse
 from .models import Hero, Album, Song
-from .forms import Userform
+from .forms import Userform,Songform
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions
@@ -17,7 +17,7 @@ from .serializers import UserSerializer, AlbumSerializer
 import requests
 from django.utils.decorators import method_decorator
 
-
+audio_file_types = ['wav', 'mp3', 'ogg']
 def geo_loc(request):
     ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '')
     response = requests.get('https://api6.ipify.org?format=json', timeout=5)
@@ -80,12 +80,37 @@ class AlbumDelete(DeleteView):
     success_url = reverse_lazy('music:index')
 
 
-@method_decorator(login_required,name='dispatch')
-class SongCreate(CreateView):
-    model = Song
-    fields = ['album', 'file_type', 'song_title', 'is_favorite']
-    success_url = "/music/{album_id}"
+@login_required(login_url='/music/login')
+def SongCreate(request, album_id):
+    form = Songform(request.POST or None, request.FILES or None)
+    album = get_object_or_404(Album, pk=album_id)
 
+    if form.is_valid():
+        for song in album.song_set.all():
+            if song.song_title==form.cleaned_data.get("song_title"):
+                context={
+                      'album':album,
+                      'form':form,
+                      'error_message':'The song already exists'
+                }
+                return render(request,'music/song_form.html',context)
+        song = form.save(commit=False)
+        song.album = album
+        if song.audio_file.url.split('.')[-1] not in audio_file_types:
+            context = {
+                'album': album,
+                'form': form,
+                'error_message': 'Audio file must be WAV, MP3, or OGG',
+            }
+            return render(request, 'music/song_form.html', context)
+        song.save()
+
+        return render(request, 'music/detail.html', {'album': album})
+    context = {
+        'album': album,
+        'form': form,
+    }
+    return render(request, 'music/song_form.html', context)
 
 @method_decorator(login_required,name='dispatch')
 class SongDelete(DeleteView):
@@ -167,3 +192,17 @@ class logout_user(APIView):
         logout(request)
 
         return render(request, 'music/visitor_base.html')
+
+
+def favorite_album(request, album_id):
+    album = get_object_or_404(Album, pk=album_id)
+    try:
+        if album.is_favorite:
+            album.is_favorite = False
+        else:
+            album.is_favorite = True
+        album.save()
+    except (KeyError, Album.DoesNotExist):
+        return JsonResponse({'success': False})
+    else:
+        return JsonResponse({'success': True})

@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'album/(?P<pk>[0-9]+)/delete/$', views.AlbumDelete.as_view(), name='album-delete'),
 
 
-    url(r'^(?P<album_id>[0-9]+)/song/add/$',views.SongCreate.as_view(), name='song-add'),
+    url(r'^(?P<album_id>[0-9]+)/song/add/$',views.SongCreate, name='song-create'),
 
     url(r'song/(?P<pk>[0-9]+)/delete/$', views.SongDelete.as_view(), name='song-delete'),
 
@@ -44,5 +44,7 @@ urlpatterns = [
     url(r'login/$',views.LoginViews.as_view(),name='login'),
 
     url(r'logout_user/$', views.logout_user.as_view(), name='logout'),
+
+    url(r'^(?P<album_id>[0-9]+)/favorite_album/$', views.favorite_album, name='favorite_album'),
 
 ]

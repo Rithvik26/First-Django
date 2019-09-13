@@ -29,6 +29,7 @@ class Album(models.Model):
     genre = models.CharField(max_length=10)
     release = models.IntegerField()
     album_logo = models.FileField()
+    is_favorite = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('music:detail', kwargs={'pk': self.pk})
@@ -39,9 +40,9 @@ class Album(models.Model):
 
 class Song(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
-    file_type = models.CharField(max_length=10)
     song_title = models.CharField(max_length=200)
     is_favorite = models.BooleanField(default=False)
+    audio_file = models.FileField(default='')
 
 
     def __str__(self):
