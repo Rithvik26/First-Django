@@ -47,4 +47,7 @@ urlpatterns = [
 
     url(r'^(?P<album_id>[0-9]+)/favorite_album/$', views.favorite_album, name='favorite_album'),
 
+    url(r'^Search$', views.Search, name='Search'),
+
+
 ]

@@ -15,7 +15,9 @@ from rest_framework.response import Response
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .serializers import UserSerializer, AlbumSerializer
 import requests
+from  django.db.models import Q
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
 
 audio_file_types = ['wav', 'mp3', 'ogg']
 def geo_loc(request):
@@ -205,4 +207,11 @@ def favorite_album(request, album_id):
     except (KeyError, Album.DoesNotExist):
         return JsonResponse({'success': False})
     else:
-        return JsonResponse({'success': True})
+        return redirect('music:index')
+
+
+def Search(request):
+    search_text = request.GET['search_text']
+    result = Album.objects.filter(Q(album_title__icontains=search_text) )
+
+    return render(request, 'music/index.html', {'all_albums': result,})

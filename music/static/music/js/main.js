@@ -33,7 +33,7 @@ var SongsListPage = {
 		this.bindEvents();
 	},
 
-	render: function() {
+	rende r: function() {
 
 	},
 
